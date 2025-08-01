@@ -19,10 +19,32 @@ console.log("ENV CHECK:", {
   API_SECRET: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 const app = express();
-app.use(cors());
+
+// ✅ Replace default cors() with custom setup
+const allowedOrigins = [
+  "http://localhost:3000",          // Local dev
+  "https://stock-ease.netlify.app"  // Netlify deployed frontend
+];
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
+// ✅ Parse JSON and URL-encoded data
 app.use(express.json());
+app.use(require("body-parser").urlencoded({ extended: true }));
+
 
 
 app.post("/delete-image", async (req, res) => {
