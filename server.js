@@ -6,6 +6,13 @@ const path = require("path");
 const cors = require("cors");
 const cloudinary = require("cloudinary").v2;
 
+// ✅ This is missing in your current code:
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 console.log("ENV CHECK:", {
   CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
   API_KEY: process.env.CLOUDINARY_API_KEY,
