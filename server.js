@@ -1,12 +1,11 @@
-
 const express = require("express");
-const multer = require("multer");
+const path = require("path");
+const cors = require("cors");
 const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-require("dotenv").config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+app.use(cors());
+app.use(express.json());
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -14,27 +13,23 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "uploads",
-    allowed_formats: ["jpg", "png", "jpeg"],
-  },
-});
 
-const upload = multer({ storage });
+app.post("/delete-image", async (req, res) => {
+  const { public_id } = req.body;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-app.post("/upload", upload.single("image"), (req, res) => {
-  res.json({ url: req.file.path });
+  try {
+    const result = await cloudinary.uploader.destroy(public_id);
+    res.status(200).json({ message: "Deleted", result });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get("/", (req, res) => {
-  res.send("Cloudinary upload server is running!");
+  res.send("Backend is running.");
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
