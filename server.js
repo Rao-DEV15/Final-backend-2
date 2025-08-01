@@ -16,14 +16,17 @@ cloudinary.config({
 
 app.post("/delete-image", async (req, res) => {
   const { public_id } = req.body;
+  console.log("Received public_id:", public_id);
 
   try {
     const result = await cloudinary.uploader.destroy(public_id);
     res.status(200).json({ message: "Deleted", result });
   } catch (error) {
+    console.error("Cloudinary delete error:", error);
     res.status(500).json({ error: error.message });
   }
 });
+
 
 app.get("/", (req, res) => {
   res.send("Backend is running.");
