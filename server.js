@@ -1,41 +1,38 @@
 require('dotenv').config();
 
-
-const express = require("express");
-const cors = require("cors");
-const cloudinary = require("cloudinary").v2;
+const express=require("express")
+const cors=require("cors")
+const cloudinary=require("cloudinary").v2 
 
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+ cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+})  
 
-
-
-
-const app = express();
-app.use(cors());
+const app=express();
+app.use(cors({
+    origin:'https://stock-ease-five.vercel.app/'
+}));
 app.use(express.json());
-
 
 app.post("/delete-image", async (req, res) => {
   const { public_id } = req.body;
-  console.log("Received public_id:", public_id);
+  console.log("Recived PI");
 
   try {
-    const result = await cloudinary.uploader.destroy(public_id);
-    res.status(200).json({ message: "Deleted", result });
-  } catch (error) {
-    console.error("Cloudinary delete error:", error);
-    res.status(500).json({ error: error.message });
+     await cloudinary.uploader.destroy(public_id);
+    res.status(200).json({message:"Deleted"});
+  } catch(error) {
+     console.error("cloudinary delete error")
+  res.status(500).json({ error: error.message });
+
   }
 });
 
-
 app.get("/", (req, res) => {
   res.send("Backend is running.");
-});
+});  
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
