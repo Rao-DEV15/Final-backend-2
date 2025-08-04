@@ -12,11 +12,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-console.log("ENV CHECK:", {
-  CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
-  API_KEY: process.env.CLOUDINARY_API_KEY,
-  API_SECRET: process.env.CLOUDINARY_API_SECRET,
-});
+
 
 
 const app = express();
