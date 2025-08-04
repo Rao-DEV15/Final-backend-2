@@ -12,7 +12,7 @@ cloudinary.config({
 
 const app=express();
 app.use(cors({
-    origin:'https://stock-ease-five.vercel.app/'
+    origin:'https://stock-ease-five.vercel.app'
 }));
 app.use(express.json());
 
